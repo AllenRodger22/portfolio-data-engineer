@@ -2,19 +2,11 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, Table, Column, MetaData, Float, String, Integer
-load_dotenv()
-# Extract
-df = pd.read_csv('./dato.csv')
+from classes import ETL, Connector
 
-# Transformations
-mydict = {'Bueno':3,'Excelente':4,'Malo':1,'Aceptable':2}
-
-df['Critic_Score_Class'] = df['Critic_Score_Class'].apply(lambda x : mydict[x] if x == x else  x )
-
-# Create a new MetaData object
 metadata = MetaData()
 
-# Create a new table in the database
+# Create table
 table = Table('VideoGameSales', metadata,
 Column('Platform', String),
 Column("Genre", String),
@@ -26,21 +18,17 @@ Column('Other_Sales', Float),
 Column('Global_Sales', Float),
 Column('Rating', String),
 Column('Critic_Score_Class', Integer))
+#start ETL Object
+etl = ETL()
 
-HOST = os.environ["HOST"]
-PORT = os.environ["PORt"]
-USER = os.environ["USER"]
-PASS = os.environ["PASS"]
-DATABASE = os.environ["DATABASE"]
-SSLMODE = os.environ["SSLMODE"]
-connection_string = f"postgresql://{USER}:{PASS}@{HOST}:{PORT}/{DATABASE}?sslmode={SSLMODE}"
+connector = Connector(os.environ["HOST"],os.environ["PORT"],os.environ["USER"],os.environ["PASS"],os.environ["DATABASE"],os.environ["SSLMODE"])
+engine = connector.createEngine()
 
-# Create the engine
-engine = create_engine(connection_string)
+data = etl.extract("/dato.csv")
+etl.transform()
 
-# Use the engine to create the table in the database
 table.create(engine)
-# Load
-data = df.to_dict()
-table.insert().execute(*data)
+
+etl.load(data,table)
+
 
