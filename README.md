@@ -7,12 +7,12 @@
 * Webscraping project (1/3) done
 * ETL project (1/1) done 
 * Data Modelling project (0/2)
-* PySpark Project (0/1) --> (W.I.P)
-* Data Quality Project (0/1)
+* PySpark ETL Project (1/1) 
+* Data Quality Project (0/1) (W.I.P)
 #
-Currently working: ETL project
+Currently working: Data Quality Project
 Upcoming ones: 
-- webscraping spider update
-- create readme of book_webscraper`
+- Data Modelling
+- Looking for new ideas...🤔
 #
 * This portfolio project started at -  12/08/2022
